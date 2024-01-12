@@ -1,19 +1,20 @@
 <?php
-
+global $link;
 // Check existence of id parameter before processing further
-if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
+
+if (isset($_GET["studentID"]) && !empty(trim($_GET["studentID"]))) {
     // Include config file
     require_once "config.php";
 
     // Prepare a select statement
-    $sql = "SELECT * FROM employees WHERE id = ?";
+    $sql = "SELECT * FROM student WHERE studentID = ?";
 
     if ($stmt = mysqli_prepare($link, $sql)) {
         // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "i", $param_id);
+        mysqli_stmt_bind_param($stmt, "i", $param_studentID);
 
         // Set parameters
-        $param_id = trim($_GET["id"]);
+        $param_studentID = trim($_GET["studentID"]);
 
         // Attempt to execute the prepared statement
         if (mysqli_stmt_execute($stmt)) {
@@ -24,10 +25,10 @@ if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
                 contains only one row, we don't need to use while loop*/
                 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-                // Retrive individual field value
+                // Retrieve individual field value
+                $studentID = $row["studentID"];
                 $name = $row["name"];
-                $address = $row["address"];
-                $salary = $row["salary"];
+                $email = $row["email"];
             } else {
                 // URL doesn't contain valid id parameter. Redirect to error page
                 header("location: error.php");
@@ -75,18 +76,18 @@ if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
                         </div>
 
                         <div class="form-group">
+                            <label>StudentID</label>
+                            <p class="form-control-static"><?php echo $row["studentID"]?></p>
+                        </div>
+
+                        <div class="form-group">
                             <label>Name</label>
                             <p class="form-control-static"><?php echo $row["name"]?></p>
                         </div>
 
                         <div class="form-group">
-                            <label>Address</label>
-                            <p class="form-control-static"><?php echo $row["address"]?></p>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Salary</label>
-                            <p class="form-control-static"><?php echo $row["salary"]?></p>
+                            <label>Email</label>
+                            <p class="form-control-static"><?php echo $row["email"]?></p>
                         </div>
                         <p><a href="index.php" class="btn btn-primary">Back</a></p>
                     </div>

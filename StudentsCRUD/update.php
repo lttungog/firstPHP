@@ -1,16 +1,17 @@
 <?php
 
 // Include config file
+global $link;
 require_once 'config.php';
 
 // Define variables and initialize with empty values
-$name = $address = $salary = "";
-$name_err = $address_err = $salary_err = "";
+$studentID = $name = $email = "";
+$studentID_err = $name_err = $email_err = "";
 
 // Processing form data when form is submitted
-if(isset($_POST["id"]) && !empty($_POST["id"])) {
+if(isset($_POST["studentID"]) && !empty($_POST["studentID"])) {
     // Get hidden input value
-    $id = $_POST["id"];
+    $id = $_POST["studentID"];
 
     // Validate name
     $input_name = trim($_POST["name"]);
@@ -73,12 +74,12 @@ if(isset($_POST["id"]) && !empty($_POST["id"])) {
     mysqli_close($link);
 } else {
     // Check existence of id parameter before processing further
-    if(isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
+    if(isset($_GET["studentID"]) && !empty(trim($_GET["studentID"]))) {
         // Get URL parameter
-        $id = trim($_GET["id"]);
+        $id = trim($_GET["studentID"]);
 
         // Prepare a select statement
-        $sql = "SELECT * FROM employees WHERE id = ?";
+        $sql = "SELECT * FROM student WHERE studentID = ?";
         if ($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "i", $param_id);

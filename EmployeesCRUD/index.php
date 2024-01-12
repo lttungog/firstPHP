@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -38,7 +38,8 @@
                             <a href="create.php" class="btn btn-success pull-right">Add New Employee</a>
                         </div>
                         <?php
-
+                        
+                        global$link;
                         // Include config file
                         require_once 'config.php';
 
@@ -78,7 +79,7 @@
                                 mysqli_free_result($result);
 
                             } else {
-                                echo "<p class='lead'><em>No records were found.</em></p>";
+                                echo "<p class='lead'>11<em>No records were found.</em></p>";
                             }
                         } else {
                             echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);

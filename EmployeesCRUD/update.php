@@ -1,6 +1,7 @@
 <?php
 
 // Include config file
+global $link;
 require_once 'config.php';
 
 // Define variables and initialize with empty values

@@ -39,6 +39,7 @@
                         </div>
                         <?php
 
+                        global$link;
                         // Include config file
                         require_once 'config.php';
 
@@ -50,7 +51,6 @@
                                 echo "<table class='table table-bordered table-striped'>";
                                     echo "<thead>";
                                         echo "<tr>";
-                                            echo "<th>#</th>";
                                             echo "<th>StudentID</th>";
                                             echo "<th>Name</th>";
                                             echo "<th>Email</th>";
@@ -64,9 +64,9 @@
                                             echo "<td>" . $row['name'] . "</td>";
                                             echo "<td>" . $row['email'] . "</td>";
                                             echo "<td>";
-                                                echo "<a href='read.php?id=" . $row['id'] ."' title='View Record' data-toggle='tooltip'><span class='glyphicon glyphicon-eye-open'></span></a>";
-                                                echo "<a href='update.php?id=" . $row['id'] ."' title='Update Record' data-toggle='tooltip'><span class='glyphicon glyphicon-pencil'></span></a>";
-                                                echo "<a href='delete.php?id=" . $row['id'] ."' title='Delete Record' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'></span></a>";
+                                                echo "<a href='read.php?id=" . $row['studentID'] ."' title='View Record' data-toggle='tooltip'><span class='glyphicon glyphicon-eye-open'></span></a>";
+                                                echo "<a href='update.php?id=" . $row['studentID'] ."' title='Update Record' data-toggle='tooltip'><span class='glyphicon glyphicon-pencil'></span></a>";
+                                                echo "<a href='delete.php?id=" . $row['studentID'] ."' title='Delete Record' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'></span></a>";
                                             echo "</td>";
                                         echo "</tr>";
                                     }
