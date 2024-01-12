@@ -13,17 +13,6 @@ if(!empty($_POST["id"])) {
     // Get hidden input value
     $id = $_POST["id"];
 
-    // Validate studentID
-    $input_studentID = trim($_POST["studentID"]);
-    echo $input_studentID;
-    if(empty($input_studentID)) {
-        $studentID_err = "Please enter the student's ID.";
-    } elseif (!ctype_digit($input_studentID)) {
-        $studentID_err = "Please enter a positive integer value.";
-    } else {
-        $studentID = $input_studentID;
-    }
-
     //Validate name
     $input_name = trim($_POST["name"]);
     if(empty($input_name)) {
@@ -151,11 +140,6 @@ if(!empty($_POST["id"])) {
                     </div>
                     <p>Please fill this form and submit to add student record to the database.</p>
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                        <div class="form-group <?php echo (!empty($studentID_err)) ? 'has-error' : ''; ?>">
-                            <label>Student ID</label>
-                            <input type="text" name="studentID" class="form-control" value="<?php echo $studentID; ?>">
-                            <span class="help-block"><?php echo $studentID_err;?></span>
-                        </div>
 
                         <div class="form-group <?php echo (!empty($name_err)) ? 'has-error' : ''; ?>">
                             <label>Name</label>
