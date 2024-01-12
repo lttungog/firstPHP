@@ -93,10 +93,10 @@ if(isset($_POST["id"]) && !empty($_POST["id"])) {
 
                 if (mysqli_num_rows($result)) {
                     /* Fetch result row as an associative array. Since the result set
-                    contains only one row, we don't beed to use while loop*/
+                    contains only one row, we don't need to use while loop*/
                     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-                    // Retrive individual field value
+                    // Retrieve individual field value
                     $name = $row["name"];
                     $address = $row["address"];
                     $salary = $row["salary"];

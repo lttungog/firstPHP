@@ -9,11 +9,22 @@ $studentID = $name = $email = "";
 $studentID_err = $name_err = $email_err = "";
 
 // Processing form data when form is submitted
-if(isset($_POST["studentID"]) && !empty($_POST["studentID"])) {
+if(!empty($_POST["id"])) {
     // Get hidden input value
-    $id = $_POST["studentID"];
+    $id = $_POST["id"];
 
-    // Validate name
+    // Validate studentID
+    $input_studentID = trim($_POST["studentID"]);
+    echo $input_studentID;
+    if(empty($input_studentID)) {
+        $studentID_err = "Please enter the student's ID.";
+    } elseif (!ctype_digit($input_studentID)) {
+        $studentID_err = "Please enter a positive integer value.";
+    } else {
+        $studentID = $input_studentID;
+    }
+
+    //Validate name
     $input_name = trim($_POST["name"]);
     if(empty($input_name)) {
         $name_err = "Please enter a name.";
@@ -23,37 +34,28 @@ if(isset($_POST["studentID"]) && !empty($_POST["studentID"])) {
         $name = $input_name;
     }
 
-    // Validate address
-    $input_address = trim($_POST["address"]);
-    if(empty($input_address)) {
-        $address_err = "Please enter an address.";
+    // Validate email
+    $input_email = trim($_POST["email"]);
+    if(empty($input_email)) {
+        $email_err = "Please enter an email address.";
+    } elseif (!filter_var(trim($_POST["email"]), FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/")))) {
+        $email_err = "Please enter a valid email address.";
     } else {
-        $address = $input_address;
-    }
-
-    // Validate salary
-    $input_salary = trim($_POST["salary"]);
-    if(empty($input_salary)) {
-        $salary_err = "Please enter the salary amount.";
-    } elseif (!ctype_digit($input_salary)) {
-        $salary_err = "Please enter a positive integer value.";
-    } else {
-        $salary = $input_salary;
+        $email = $input_email;
     }
 
     // Check input errors before inserting in database
-    if(empty($name_err) && empty($address_err) && empty($salary_err)) {
+    if(empty($studentID_err) && empty($name_err) && empty($email_err)) {
         // Prepare an insert statement
-        $sql = "UPDATE employees SET name=?, address=?, salary=? WHERE id=?";
+        $sql = "UPDATE student SET name=?, email=? WHERE studentID=?";
 
         if($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sssi", $param_name, $param_address, $param_salary, $param_id);
+            mysqli_stmt_bind_param($stmt, "ssi",$param_name, $param_email, $param_id);
 
             // Set parameters
             $param_name = $name;
-            $param_address = $address;
-            $param_salary = $salary;
+            $param_email = $email;
             $param_id = $id;
 
             // Attempt to execute the prepared statement
@@ -74,9 +76,9 @@ if(isset($_POST["studentID"]) && !empty($_POST["studentID"])) {
     mysqli_close($link);
 } else {
     // Check existence of id parameter before processing further
-    if(isset($_GET["studentID"]) && !empty(trim($_GET["studentID"]))) {
+    if(isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
         // Get URL parameter
-        $id = trim($_GET["studentID"]);
+        $id = trim($_GET["id"]);
 
         // Prepare a select statement
         $sql = "SELECT * FROM student WHERE studentID = ?";
@@ -93,17 +95,18 @@ if(isset($_POST["studentID"]) && !empty($_POST["studentID"])) {
 
                 if (mysqli_num_rows($result)) {
                     /* Fetch result row as an associative array. Since the result set
-                    contains only one row, we don't beed to use while loop*/
+                    contains only one row, we don't need to use while loop*/
                     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-                    // Retrive individual field value
+                    // Retrieve individual field value
+                    $studentID = $row["studentID"];
                     $name = $row["name"];
-                    $address = $row["address"];
-                    $salary = $row["salary"];
+                    $email = $row["email"];
+
                 } else {
                     // URL doesn't contain valid id. Redirect to error page
-                    header("location: error.php");
-                    exit();
+//                    header("location: error.php");
+//                    exit();
                 }
             } else {
                 echo "Oops! Something went wrong. Please try again later.";
@@ -117,8 +120,8 @@ if(isset($_POST["studentID"]) && !empty($_POST["studentID"])) {
         mysqli_close($link);
     } else {
         // URL doesn't contain id parameter. Redirect to error page
-        header("location: error.php");
-        exit();
+//        header("location: error.php");
+//        exit();
     }
 }
 
@@ -146,27 +149,27 @@ if(isset($_POST["studentID"]) && !empty($_POST["studentID"])) {
                     <div class="page-header">
                         <h2>Create Record</h2>
                     </div>
-                    <p>Please fill this form and submit to add employee record to the database.</p>
-                    <form action="<?php echo htmlspecialchars($_SERVER["REQUEST_URI"]); ?>" method="post">
+                    <p>Please fill this form and submit to add student record to the database.</p>
+                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                        <div class="form-group <?php echo (!empty($studentID_err)) ? 'has-error' : ''; ?>">
+                            <label>Student ID</label>
+                            <input type="text" name="studentID" class="form-control" value="<?php echo $studentID; ?>">
+                            <span class="help-block"><?php echo $studentID_err;?></span>
+                        </div>
+
                         <div class="form-group <?php echo (!empty($name_err)) ? 'has-error' : ''; ?>">
                             <label>Name</label>
-                            <input type="text" name="name" class="form-control" value="<?php echo $name; ?>">
+                            <input type="text" name="name" class="form-control"><?php echo $name; ?></input>
                             <span class="help-block"><?php echo $name_err;?></span>
                         </div>
 
-                        <div class="form-group <?php echo (!empty($address_err)) ? 'has-error' : ''; ?>">
-                            <label>Address</label>
-                            <textarea name="address" class="form-control"><?php echo $address; ?></textarea>
-                            <span class="help-block"><?php echo $address_err;?></span>
+                        <div class="form-group <?php echo (!empty($email_err)) ? 'has-error' : ''; ?>">
+                            <label>Email</label>
+                            <input type="text" name="email" class="form-control" value="<?php echo $email; ?>">
+                            <span class="help-block"><?php echo $email_err;?></span>
                         </div>
 
-                        <div class="form-group <?php echo (!empty($salary_err)) ? 'has-error' : ''; ?>">
-                            <label>Salary</label>
-                            <input type="text" name="salary" class="form-control" value="<?php echo $salary; ?>">
-                            <span class="help-block"><?php echo $salary_err;?></span>
-                        </div>
-
-                        <input type="hidden" name="id" value="<?php echo $id; ?>"/>
+                        <input type="hidden" name="id" value="<?php echo $studentID; ?>"/>
                         <input type="submit" class="btn btn-primary" value="Submit">
                         <a href="index.php" class="btn btn-default">Cancel</a>
                     </form>

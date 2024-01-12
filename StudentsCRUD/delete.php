@@ -1,7 +1,7 @@
 <?php
 
 // Process delete operation after confirmation
-if (isset($_POST["studentID"]) && !empty($_POST["studentID"])) {
+if (isset($_POST["id"]) && !empty($_POST["id"])) {
     // Include config file
     require_once "config.php";
 
@@ -10,10 +10,10 @@ if (isset($_POST["studentID"]) && !empty($_POST["studentID"])) {
 
     if ($stmt = mysqli_prepare($link, $sql)) {
         // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "i", $param_studentID);
+        mysqli_stmt_bind_param($stmt, "i", $param_id);
 
         // Set parameters
-        $param_studentID = trim($_POST["studentID"]);
+        $param_id = trim($_POST["id"]);
 
         // Attempt to execute prepared statement
         if (mysqli_stmt_execute($stmt)) {
