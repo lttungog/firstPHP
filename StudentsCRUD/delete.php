@@ -1,6 +1,7 @@
 <?php
 
 // Process delete operation after confirmation
+global $link;
 if (isset($_POST["id"]) && !empty($_POST["id"])) {
     // Include config file
     require_once "config.php";
